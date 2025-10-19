@@ -23,6 +23,12 @@ let config = {childList: true, subtree: true};
 obs.observe(document.body, config);
 replace_atag();//初回実行?
 
-const ins_el = document.createElement("script");
-ins_el.innerText = 'const window_open_origin = window.open;let before_request = "";window.open = (url,target,features)=>{if(before_request!=url){before_request = url;window_open_origin(url,"_self",features);}}'
-document.body.appendChild(ins_el);
+// window.openをオーバーライドして新しいタブを防ぐ
+const window_open_origin = window.open;
+let before_request = "";
+window.open = (url, target, features) => {
+    if (before_request != url) {
+        before_request = url;
+        window_open_origin(url, "_self", features);
+    }
+};
